@@ -19,17 +19,17 @@ private:
     static std::list<PtrDetails<T> > refContainer;
     // addr points to the allocated memory to which
     // this Pointer pointer currently points.
-    T *addr;
+    T *addr; //----------------------------------------------------------(1)
     /*  isArray is true if this Pointer points
         to an allocated array. It is false
         otherwise.
     */
-    bool isArray;
+    bool isArray; //----------------------------------------------------------(2)
     // true if pointing to array
     // If this Pointer is pointing to an allocated
     // array, then arraySize contains its size.
-    unsigned arraySize; // size of the array
-    static bool first; // true when first Pointer is created
+    unsigned arraySize; // size of the array //-------------------------------(3)
+    static bool first; // true when first Pointer is created -------------------(4)
     // Return an iterator to pointer details in refContainer.
     typename std::list<PtrDetails<T> >::iterator findPtrInfo(T *ptr);
 public:
@@ -91,6 +91,9 @@ public:
     static void shutdown();
 };
 
+///END OF CLASS DECLARATION
+
+
 // STATIC INITIALIZATION
 // Creates storage for the static variables
 template <class T, int size>
@@ -106,16 +109,29 @@ Pointer<T,size>::Pointer(T *t){
         atexit(shutdown);
     first = false;
 
-    // TODO: Implement Pointer constructor
+    // TODO: Implement Pointer constructor //////////////////////////////////////////////////////////////////////////////////////
     // Lab: Smart Pointer Project Lab
+    typename std::list<PtrDetails<T> >::iterator findPtrInfo(T *ptr);
 
 }
 // Copy constructor.
 template< class T, int size>
 Pointer<T,size>::Pointer(const Pointer &ob){
 
-    // TODO: Implement Pointer constructor
+    // TODO: Implement Pointer constructor //////////////////////////////////////////////////////////////////////////////////////
     // Lab: Smart Pointer Project Lab
+
+
+
+    this->addr = ob.addr; // (1)
+    this->isArray = ob.isArray; // (2)
+    this->arraySize = ob.arraySize; (3)
+
+
+    typename std::list<PtrDetails<T> >::iterator p;
+    p = findPtrInfo(ob.addr);
+
+    p->refcount++;
 
 }
 
@@ -123,7 +139,7 @@ Pointer<T,size>::Pointer(const Pointer &ob){
 template <class T, int size>
 Pointer<T, size>::~Pointer(){
 
-    // TODO: Implement Pointer destructor
+    // TODO: Implement Pointer destructor //////////////////////////////////////////////////////////////////////////////////////
     // Lab: New and Delete Project Lab
 }
 
@@ -132,7 +148,7 @@ Pointer<T, size>::~Pointer(){
 template <class T, int size>
 bool Pointer<T, size>::collect(){
 
-    // TODO: Implement collect function
+    // TODO: Implement collect function //////////////////////////////////////////////////////////////////////////////////////
     // LAB: New and Delete Project Lab
     // Note: collect() will be called in the destructor
     return false;
@@ -142,7 +158,7 @@ bool Pointer<T, size>::collect(){
 template <class T, int size>
 T *Pointer<T, size>::operator=(T *t){
 
-    // TODO: Implement operator==
+    // TODO: Implement operator== //////////////////////////////////////////////////////////////////////////////////////
     // LAB: Smart Pointer Project Lab
 
 }
@@ -150,7 +166,7 @@ T *Pointer<T, size>::operator=(T *t){
 template <class T, int size>
 Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
 
-    // TODO: Implement operator==
+    // TODO: Implement operator== //////////////////////////////////////////////////////////////////////////////////////
     // LAB: Smart Pointer Project Lab
 
 }
