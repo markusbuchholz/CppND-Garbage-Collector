@@ -101,6 +101,7 @@ std::list<PtrDetails<T> > Pointer<T, size>::refContainer;
 template <class T, int size>
 bool Pointer<T, size>::first = true;
 
+// DONE
 // Constructor for both initialized and uninitialized objects. -> see class interface
 template<class T,int size>
 Pointer<T,size>::Pointer(T *t){
@@ -111,21 +112,29 @@ Pointer<T,size>::Pointer(T *t){
 
     // TODO: Implement Pointer constructor //////////////////////////////////////////////////////////////////////////////////////
     // Lab: Smart Pointer Project Lab
-    typename std::list<PtrDetails<T> >::iterator findPtrInfo(T *ptr);
+
+    PtrDetails<T> new_item(t, size);
+    refContainer.push_back(new_item);
+    addr = t;
+    if (size > 0)
+        isArray = true;
+    arraySize = size;
+
 
 }
+//DONE
 // Copy constructor.
 template< class T, int size>
-Pointer<T,size>::Pointer(const Pointer &ob){
+Pointer<T,size>::Pointer(const Pointer &ob): addr(ob.addr), isArray(ob.isArray), arraySize(ob.arraySize){
 
     // TODO: Implement Pointer constructor //////////////////////////////////////////////////////////////////////////////////////
     // Lab: Smart Pointer Project Lab
 
 
 
-    this->addr = ob.addr; // (1)
-    this->isArray = ob.isArray; // (2)
-    this->arraySize = ob.arraySize; (3)
+   // this->addr = ob.addr; // (1)
+   // this->isArray = ob.isArray; // (2)
+   // this->arraySize = ob.arraySize; (3)
 
 
     typename std::list<PtrDetails<T> >::iterator p;
@@ -141,6 +150,16 @@ Pointer<T, size>::~Pointer(){
 
     // TODO: Implement Pointer destructor //////////////////////////////////////////////////////////////////////////////////////
     // Lab: New and Delete Project Lab
+    typename std::list<PtrDetails<T> >::iterator p;
+    p = findPtrInfo(addr);
+    if (p->refcount)
+        p->refcount--; 
+
+    collect();
+
+
+
+
 }
 
 // Collect garbage. Returns true if at least
