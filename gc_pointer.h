@@ -101,7 +101,7 @@ std::list<PtrDetails<T> > Pointer<T, size>::refContainer;
 template <class T, int size>
 bool Pointer<T, size>::first = true;
 
-// DONE
+// DONE ***
 // Constructor for both initialized and uninitialized objects. -> see class interface
 template<class T,int size>
 Pointer<T,size>::Pointer(T *t){
@@ -113,16 +113,17 @@ Pointer<T,size>::Pointer(T *t){
     // TODO: Implement Pointer constructor //////////////////////////////////////////////////////////////////////////////////////
     // Lab: Smart Pointer Project Lab
 
-    PtrDetails<T> new_item(t, size);
-    refContainer.push_back(new_item);
+    PtrDetails<T> new_pointer(t, size);
+    refContainer.push_back(new_pointer);
     addr = t;
-    if (size > 0)
+    if (size > 0) {
         isArray = true;
+    };
     arraySize = size;
 
 
 }
-//DONE
+//DONE ***
 // Copy constructor.
 template< class T, int size>
 Pointer<T,size>::Pointer(const Pointer &ob): addr(ob.addr), isArray(ob.isArray), arraySize(ob.arraySize){
@@ -130,20 +131,13 @@ Pointer<T,size>::Pointer(const Pointer &ob): addr(ob.addr), isArray(ob.isArray),
     // TODO: Implement Pointer constructor //////////////////////////////////////////////////////////////////////////////////////
     // Lab: Smart Pointer Project Lab
 
-
-
-   // this->addr = ob.addr; // (1)
-   // this->isArray = ob.isArray; // (2)
-   // this->arraySize = ob.arraySize; (3)
-
-
     typename std::list<PtrDetails<T> >::iterator p;
     p = findPtrInfo(ob.addr);
 
     p->refcount++;
 
 }
-
+//DONE ***
 // Destructor for Pointer.
 template <class T, int size>
 Pointer<T, size>::~Pointer(){
@@ -152,25 +146,47 @@ Pointer<T, size>::~Pointer(){
     // Lab: New and Delete Project Lab
     typename std::list<PtrDetails<T> >::iterator p;
     p = findPtrInfo(addr);
-    if (p->refcount)
-        p->refcount--; 
+    if (p->refcount){
+        p->refcount--;
+    }; 
 
     collect();
 
-
-
-
 }
-
+//DONE ***
 // Collect garbage. Returns true if at least
 // one object was freed.
 template <class T, int size>
 bool Pointer<T, size>::collect(){
-
-    // TODO: Implement collect function //////////////////////////////////////////////////////////////////////////////////////
+    // TODO: Implement collect function //////////////////////////////////////////////////////////////////////////////////////77
     // LAB: New and Delete Project Lab
     // Note: collect() will be called in the destructor
-    return false;
+		bool memfreed = false;
+		typename std::list<PtrDetails<T>>::iterator p;
+		do {
+            //Scan refContainer looking for unreferenced pointers.
+			for (p = refContainer.begin(); p != refContainer.end(); p++){
+				if(p->refcount>0)
+					continue;
+				memfreed = true;
+                //  Remove unused entry from refContainer.
+				refContainer.remove(*p);
+                
+                //Free memory unless the Pointer is null.
+				if(p->memPtr){
+
+					if(p->isArray){
+						delete[] p->memPtr;
+					}else{
+						delete p->memPtr;
+					}
+				}
+
+				// Restart the search
+			  break;	
+			}
+		} while (p != refContainer.end());
+    return memfreed;
 }
 
 // Overload assignment of pointer to Pointer.
