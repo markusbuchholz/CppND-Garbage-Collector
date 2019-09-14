@@ -1,11 +1,10 @@
 # CppND-Garbage-Collector
-The final project for this Memory Management course is to implement your own
-version of a smart pointer. You can think of this as implementing your own
-garbage collector, to use a concept from other programming languages. Building
+This repository includes the final project for this Memory Management course, where implementation of
+own smart pointer has to be done. You can think of this as implementing your own
+GARBAGE COLLECTOR, to use a concept from other programming languages. Building
 this project will help you understand both how to work with pointers and
 references, and also why smart pointers are so important to modern C++
-programming. Complete the implementations and verify that your implementation
-does not have any memory leaks!
+programming. 
 
 # Building
 To build this project, you will need a C++ compiler. The `make` script provided
@@ -20,9 +19,3 @@ last-compiled version. Adjust your code to resolve compiler errors and try again
 $ ./make
 $ ./compiled
 ```
-
-## Project TODO List:
-- Complete `Pointer` constructor
-- Complete `Pointer` `operator==`
-- Complete `Pointer` destructor
-- Complete `PtrDetails` class

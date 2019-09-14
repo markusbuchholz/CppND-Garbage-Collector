@@ -189,21 +189,54 @@ bool Pointer<T, size>::collect(){
     return memfreed;
 }
 
+//DONE ***
 // Overload assignment of pointer to Pointer.
 template <class T, int size>
 T *Pointer<T, size>::operator=(T *t){
+  // TODO: Implement operator==
+  // LAB: Smart Pointer Project Lab
+	
+    typename std::list<PtrDetails<T>>::iterator p;
+    
+    p = findPtrInfo(this->addr);
+	p->refcount--;
+	
+    p = findPtrInfo(t);
 
-    // TODO: Implement operator== //////////////////////////////////////////////////////////////////////////////////////
-    // LAB: Smart Pointer Project Lab
-
+	if (p != refContainer.end() ) {
+		p->refcount++;
+	}
+    else {
+		PtrDetails<T> over_pointer(t, size);
+		refContainer.push_front(over_pointer);
+	}
+  
+	this-> addr = t;
+	
+    return t;
 }
-// Overload assignment of Pointer to Pointer.
+//DONE ***
+// Overload assignment of Pointer to Pointer/////////////////////////////////
 template <class T, int size>
 Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
+    if (*this == rv) {
+    return *this;
+    }
 
-    // TODO: Implement operator== //////////////////////////////////////////////////////////////////////////////////////
-    // LAB: Smart Pointer Project Lab
+    typename std::list<PtrDetails<T> >::iterator p;
+    p = findPtrInfo(addr);
 
+    p->refcount--;
+
+    p = findPtrInfo(rv.addr);
+
+    p->refcount++;
+
+    this->addr = rv.addr;
+    this->isArray = rv.isArray;
+    this->arraySize = rv.arraySize;
+
+    return *this;
 }
 
 // A utility function that displays refContainer.
